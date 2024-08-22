@@ -1,0 +1,66 @@
+replicaCount: 1
+
+image:
+  repository: 817602830538.dkr.ecr.eu-west-1.amazonaws.com/optimy
+  pullPolicy: Always
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+env:
+
+envConfigMap:
+
+envSecrets:
+  DB_HOST: app-manager-db
+  DB_PORT: app-manager-db
+  DB_NAME: app-manager-db
+  DB_USER: app-manager-db
+  DB_PASSWORD: app-manager-db
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: "alb"
+  annotations:
+    albScheme: internet-facing
+    dnsName: "optimy.bouakki.com"
+    certArn: "arn:aws:acm:eu-west-1:817602830538:certificate/17d0e3ca-6886-42b4-97cb-cf017415b581"
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 768Mi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 90
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

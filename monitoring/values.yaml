@@ -1,0 +1,28 @@
+prometheus:
+  prometheusSpec:
+    additionalScrapeConfigs:
+      - job_name: 'node-exporter'
+        scrape_interval: 15s
+        static_configs:
+          - targets: ['node-exporter.monitoring.svc.cluster.local:9100']
+  image: prom/prometheus:latest
+  service:
+    port: 9090
+  
+
+grafana:
+  image: grafana/grafana:latest
+  service:
+    port: 3000
+
+nodeExporter:
+  image: prom/node-exporter:latest
+
+
+ingress:
+  enabled: true
+  className: "alb"
+  annotations:
+    albScheme: internet-facing
+    dnsName: "grafana.bouakki.com"
+    certArn: "arn:aws:acm:eu-west-1:817602830538:certificate/17d0e3ca-6886-42b4-97cb-cf017415b581"
